@@ -1,8 +1,31 @@
+
+Description
+===========
+
 Most of the code was taken from this repository. https://github.com/rsxdalv/albion-trader
 
 You can get information about all incoming packages!
 
-Example:
+
+Requirements
+============
+
+* [node.js](http://nodejs.org/) -- v4.0.0 or newer
+
+* For Windows: [Npcap with WinPcap compatibility](https://nmap.org/npcap/)
+
+* For *nix: libpcap and libpcap-dev/libpcap-devel packages
+
+
+Install
+============
+
+    npm install
+
+
+Examples
+========
+
 ```
 const AONetwork = require('./app');
 const aoNet = new AONetwork();
