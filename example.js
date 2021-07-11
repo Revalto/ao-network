@@ -5,8 +5,8 @@ const aoNet = new AONetwork();
  * All events
  */
 aoNet.events.use((result) => {
-    console.log(result)
-})
+    console.log(result);
+});
 
 /**
  * Change location
@@ -30,3 +30,17 @@ const auction = context => {
 
 aoNet.events.on('AuctionGetMyOpenAuctions', auction);
 aoNet.events.on('AuctionModifyAuction', auction);
+
+/**
+ * Event Data
+ */
+aoNet.events.on('EVENT_DATA', context => {
+    console.log(context);
+});
+
+/**
+ * Operation Request
+ */
+aoNet.events.on('OPERATION_REQUEST', context => {
+    console.log(context);
+});

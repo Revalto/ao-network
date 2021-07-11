@@ -284,7 +284,9 @@ class AODecoder {
                     data: decodeParamsWithDebug(
                         streamConstructor(buf, start), false
                     )
-                })
+                });
+                
+                this.events.myEmit('OPERATION_REQUEST', normalizeObject(result.data));
 
                 return idx + metaLength + dataLength;
 
@@ -307,7 +309,7 @@ class AODecoder {
                     data: decodeParamsWithDebug(
                         streamConstructor(buf, start), true
                     )
-                })
+                });
 
                 const OP_TYPE_KEY = 253;
                 if(result.data[OP_TYPE_KEY]) {
@@ -326,6 +328,15 @@ class AODecoder {
                 start = idx + metaLength
 
                 tree.commandMsgParameters = buf.toString('hex', start, start + dataLength)
+
+                result = ({
+                    type: "EVENT_DATA",
+                    data: decodeParamsWithDebug(
+                        streamConstructor(buf, start), false
+                    )
+                });
+
+                this.events.myEmit('EVENT_DATA', normalizeObject(result.data));
                 
                 return idx + metaLength + dataLength
         }
