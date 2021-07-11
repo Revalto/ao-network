@@ -1,6 +1,7 @@
 const { streamConstructor, decodeParamsWithDebug } = require('./Deserialize');
 const { normalizeObject, fragmentDecode  } = require('./utils');
-const { list } = require('../data/operations');
+const operations = require('../data/operations');
+const events = require('../data/events');
 
 class AODecoder {
     constructor(events, debug) {
@@ -8,6 +9,9 @@ class AODecoder {
         this.debug = debug;
 
         this.fragments = {};
+
+        this.OP_TYPE_KEY = 253;
+        this.EV_TYPE_KEY = 252;
 
         this.commandTypes = {
             1: "Acknowledge",
@@ -286,7 +290,10 @@ class AODecoder {
                     )
                 });
                 
-                this.events.myEmit('OPERATION_REQUEST', normalizeObject(result.data));
+                this.events.myEmit(
+                    'OPERATION_REQUEST', 
+                    normalizeObject(result.data)
+                );
 
                 return idx + metaLength + dataLength;
 
@@ -311,10 +318,17 @@ class AODecoder {
                     )
                 });
 
-                const OP_TYPE_KEY = 253;
-                if(result.data[OP_TYPE_KEY]) {
-                    this.events.myEmit(list[result.data[OP_TYPE_KEY]], normalizeObject(result.data));
+                if(result.data[this.OP_TYPE_KEY]) {
+                    this.events.myEmit(
+                        operations.list[result.data[this.OP_TYPE_KEY]], 
+                        normalizeObject(result.data)
+                    );
                 }
+
+                this.events.myEmit(
+                    'OPERATION_RESPONSE', 
+                    normalizeObject(result.data)
+                );
 
                 return idx + metaLength + dataLength
 
@@ -336,7 +350,17 @@ class AODecoder {
                     )
                 });
 
-                this.events.myEmit('EVENT_DATA', normalizeObject(result.data));
+                if(result.data[this.EV_TYPE_KEY]) {
+                    this.events.myEmit(
+                        events.list[result.data[this.EV_TYPE_KEY]], 
+                        normalizeObject(result.data)
+                    );
+                }
+
+                this.events.myEmit(
+                    'EVENT_DATA', 
+                    normalizeObject(result.data)
+                );
                 
                 return idx + metaLength + dataLength
         }
