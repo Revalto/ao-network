@@ -1,20 +1,22 @@
 const { Cap, decoders } = require('cap');
-const { PROTOCOL } = decoders;
-const network = require('network');
-const AODecoder = require('./libs/AODecoder');
-const Events = require('./libs/Events');
+const { PROTOCOL }      = decoders;
+const network           = require('network');
+const AODecoder         = require('./libs/AODecoder');
+const Events            = require('./libs/Events');
+const data              = require('./data');
 
 class App {
     constructor(debug = false) {
-        this.debug = debug;
+        this.debug      = debug;
 
-        this.cap = new Cap();
-        this.events = new Events();
-        this.AODecoder = new AODecoder(this.events, this.debug);
+        this.cap        = new Cap();
+        this.events     = new Events();
+        this.AODecoder  = new AODecoder(this.events, this.debug);
+        this.data       = data;
 
-        this.PROTOCOL = PROTOCOL;
-        this.linkType = null;
-        this.buffer = Buffer.alloc(65535);
+        this.PROTOCOL   = PROTOCOL;
+        this.linkType   = null;
+        this.buffer     = Buffer.alloc(65535);
 
         this.init();
     }
@@ -62,7 +64,11 @@ class App {
     
         ret = decoders.UDP(this.buffer, ret.offset);
 
-        this.AODecoder.parseIncoming(this.buffer.slice(ret.offset));
+        if(ret.info.srcport != 5056 && ret.info.dstport != 5056) {
+            return;
+        }
+
+        this.AODecoder.packetHandler(this.buffer.slice(ret.offset));
     }
 }
 

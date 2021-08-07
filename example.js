@@ -5,42 +5,41 @@ const aoNet = new AONetwork();
  * All events
  */
 aoNet.events.use((result) => {
-    console.log(result);
+    console.log(result.context);
 });
 
 /**
- * Change location
+ * Event
  */
-aoNet.events.on('CraftBuildingChangeSettings', context => {
-    const locationId = context['0'];
+aoNet.events.on(aoNet.AODecoder.messageType.Event, (context) => {
+    if(!context.parameters.hasOwnProperty('252')) {
+        return;
+    }
 
-    console.log(`Change location => ${locationId} ID`);
-});
-
-/**
- * Auction
- * 
- * @param {Object} context 
- */
-const auction = context => {
-    const items = context[0];
-
-    items.forEach(res => console.log(res));
-}
-
-aoNet.events.on('AuctionGetMyOpenAuctions', auction);
-aoNet.events.on('AuctionModifyAuction', auction);
-
-/**
- * Event Data
- */
-aoNet.events.on('EVENT_DATA', context => {
     console.log(context);
 });
 
 /**
- * Operation Request
+ * OperationResponse
  */
-aoNet.events.on('OPERATION_REQUEST', context => {
+aoNet.events.on(aoNet.AODecoder.messageType.OperationResponse, (context) => {
+    console.log(context);
+});
+
+/**
+ * OperationRequest
+ */
+aoNet.events.on(aoNet.AODecoder.messageType.OperationRequest, (context) => {
+    console.log(context);
+});
+
+/**
+ * Auction
+ */
+aoNet.events.on(aoNet.AODecoder.messageType.OperationResponse, (context) => {
+    if(!context.parameters.hasOwnProperty('253') || context.parameters['253'] != aoNet.data.operations.AUCTION_MODIFY_AUCTION) {
+        return;
+    }
+
     console.log(context);
 });
