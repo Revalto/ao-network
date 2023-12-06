@@ -138,7 +138,8 @@ class Deserializer {
     deserializeInteger(stream) {
         const buf = stream.ReadBytes(4);
 
-        return buf[0] << 24 || buf[1] << 16 || buf[2] << 8 || buf[3];
+        // Fix the buffer number issue
+        return Buffer.from(buf).readIntBE(0, 4)
     }
 
     deserializeHashtable(input) {
