@@ -104,7 +104,7 @@ class Deserializer {
         const returnCode = this.deserializeShort(stream);
         const debugMessage = this.deserializeHandler(stream, this.deserializeByte(stream));
         const parameters = this.deserializeParameterTable(stream);
-        
+
         return {
             operationCode,
             returnCode,
@@ -155,7 +155,7 @@ class Deserializer {
     }
 
     deserializeFloat(stream) {
-        return stream.ReadFloat(); 
+        return stream.ReadFloat();
     }
 
     deserializeDouble(stream) {
@@ -243,7 +243,7 @@ class Deserializer {
         const dictionarySize = this.deserializeShort(input);
         //const keyType = keyTypeCode == 0 || keyTypeCode == 42; // I dont know
         //const valueType = valueTypeCode == 0 || valueTypeCode == 42; // I dont know
-        
+
         return this.deserializeDictionaryElements(input, dictionarySize, keyTypeCode, valueTypeCode);
     }
 
@@ -253,7 +253,7 @@ class Deserializer {
         for(let i = 0; i < dictionarySize; i++) {
             const key = this.deserializeHandler(input, keyTypeCode == 0 || keyTypeCode == 42 ? input.ReadByte() : keyTypeCode);
             const value = this.deserializeHandler(input, valueTypeCode == 0 || valueTypeCode == 42 ? input.ReadByte() : valueTypeCode);
-        
+
             instance[key] = value;
         }
 
@@ -265,7 +265,7 @@ class Deserializer {
         const valueTypeCode = input.ReadByte();
         const keyType = keyTypeCode == 0 || keyTypeCode == 42; // I dont know
         const valueType = valueTypeCode == 0 || valueTypeCode == 42; // I dont know
-        
+
         return {
             keyType,
             valueType

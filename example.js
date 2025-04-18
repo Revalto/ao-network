@@ -37,7 +37,7 @@ aoNet.events.on(aoNet.AODecoder.messageType.OperationRequest, (context) => {
  * Auction
  */
 aoNet.events.on(aoNet.AODecoder.messageType.OperationResponse, (context) => {
-    if(!context.parameters.hasOwnProperty('253') || context.parameters['253'] != aoNet.data.operations.AUCTION_MODIFY_AUCTION) {
+    if(!context.parameters.hasOwnProperty('253') || context.parameters['253'] != aoNet.data.operations.AuctionModifyAuction) {
         return;
     }
 

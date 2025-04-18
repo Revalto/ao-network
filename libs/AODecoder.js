@@ -46,7 +46,7 @@ class AODecoder {
             if(this.debug === true) {
                 console.log(`Encrypted packages are not supported`);
             }
-    
+
             return;
         }
 
@@ -74,7 +74,7 @@ class AODecoder {
                 p.position += 4;
                 commandLength -= 4;
             }
-    
+
             this.handleSendReliable(p, commandLength);
             return;
         }
@@ -105,21 +105,21 @@ class AODecoder {
         switch(messageType) {
             case this.messageType.OperationRequest:
                 this.events.myEmit(
-                    this.messageType.OperationRequest, 
+                    this.messageType.OperationRequest,
                     this.Deserializer.deserializeOperationRequest(payload)
                 );
             break;
 
             case this.messageType.OperationResponse:
                 this.events.myEmit(
-                    this.messageType.OperationResponse, 
+                    this.messageType.OperationResponse,
                     this.Deserializer.deserializeOperationResponse(payload)
                 );
-            break; 
+            break;
 
             case this.messageType.Event:
                 this.events.myEmit(
-                    this.messageType.Event, 
+                    this.messageType.Event,
                     this.Deserializer.deserializeEventData(payload)
                 );
             break;
@@ -136,6 +136,7 @@ class AODecoder {
         const totalLength = p.ReadUInt32();
         commandLength -= 4;
         const fragmentOffset = p.ReadUInt32();
+        commandLength -= 4;
 
         let fragmentLength = commandLength;
 
@@ -150,7 +151,7 @@ class AODecoder {
 
     handleSegmentedPayload(startSequenceNumber, totalLength, fragmentLength, fragmentOffset, p) {
         let segmentedPackage = this.getSegmentedPackage(startSequenceNumber, totalLength);
-    
+
         p.buf.copy(segmentedPackage.totalPayload, fragmentOffset, p.position, p.position + fragmentLength);
         p.position += fragmentLength;
         segmentedPackage.bytesWritten += fragmentLength;
