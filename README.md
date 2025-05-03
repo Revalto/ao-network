@@ -49,24 +49,28 @@ aoNet.events.use((result) => {
 ```
 aoNet.events.on(aoNet.AODecoder.messageType.Event, (context) => {
     if(!context.parameters.hasOwnProperty('252')) {
-        console.log('[Game Event]', context);
+        return;
     }
+
+    console.log('[Game Event]', context);
 });
 ```
 
 #### 2. Auction House Interactions
 ```
 aoNet.events.on(aoNet.AODecoder.messageType.OperationResponse, (context) => {
-    if(context.parameters['253'] === aoNet.data.operations.AUCTION_MODIFY_AUCTION) {
-        console.log('[Auction Update]', context);
+    if(!context.parameters.hasOwnProperty('253') || context.parameters['253'] != aoNet.data.operations.AuctionModifyAuction) {
+        return;
     }
+
+    console.log('[Auction Update]', context);
 });
 ```
 
 #### 3. Player Operations Tracking
 ```
 aoNet.events.on(aoNet.AODecoder.messageType.OperationRequest, (context) => {
-    console.log('[Player Action]', context.parameters);
+    console.log(context);
 });
 ```
 
