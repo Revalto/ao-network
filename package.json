@@ -1,6 +1,6 @@
 {
   "name": "ao-network",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "",
   "main": "app.js",
   "directories": {
@@ -8,7 +8,7 @@
   },
   "dependencies": {
     "cap": "^0.2.1",
-    "network": "^0.5.0"
+    "network": "0.7.0"
   },
   "devDependencies": {},
   "scripts": {
